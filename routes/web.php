@@ -15,5 +15,6 @@ use App\Models\BarangKeluar;
 */
 
 Route::get('/', function () {
-    return BarangKeluar::all();
+    $tampils = BarangKeluar::orderBy('id','DESC')->get();
+        return view('tampil',compact('tampils'));
 });

@@ -1,16 +1,26 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\BarangKeluar;
 
 class BarangKeluarController extends Controller
 {
+    public function indexs()
+    {
+        $tampils = BarangKeluar::orderBy('id')->get();
+        return view('tampil', compact('tampils'));
+    }
     public function index()
     {
         //
-        return BarangKeluar::all();
+        //return BarangKeluar::all();
+        $tampils = BarangKeluar::orderBy('id')->get();
+        $response = [
+            'message' => "Show data terbaru!",
+            'data' => $tampils
+        ];
+        return response()->json($response, 201);
     }
 
     /**
@@ -29,8 +39,7 @@ class BarangKeluarController extends Controller
         $barang->harga = $request->harga;
         $barang->save();
 
-        return "Data Berhasil Masuk";
-
+        return redirect()->back();
     }
 
     /**
@@ -57,8 +66,8 @@ class BarangKeluarController extends Controller
         $barang->jumlah = $jumlah;
         $barang->save();
 
-        return "Data Berhasil di Update";
-        }
+        return redirect()->route('barangkeluar.index');
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -72,6 +81,15 @@ class BarangKeluarController extends Controller
         $barang = BarangKeluar::find($id);
         $barang->delete();
 
-        return "Data Berhasil di Hapus";
+        return redirect()->route('barangkeluar.index');
+    }
+    public function add()
+    {
+        return view('add');
+    }
+    public function edit($id)
+    {
+        $edit = BarangKeluar::findorFail($id);
+        return view('edit', compact('edit'));
     }
 }
